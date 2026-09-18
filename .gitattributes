@@ -1,0 +1,2 @@
+# Preserve vendored schema/license bytes, including upstream CRLF line endings.
+packages/ocpp/schemas/** -text whitespace=cr-at-eol

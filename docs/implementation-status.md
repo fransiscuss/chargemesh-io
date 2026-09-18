@@ -13,7 +13,8 @@ Local validation and self-review completed:
 - Reviewed generated SQL, constraints, encryption authentication and key handling,
   migration cleanup, secret exclusion, and test independence. Corrected bigint
   and JSON default generation issues before applying the initial migration.
-- CI confirmation is pending the F0 push. No later feature has been started.
+- Committed and pushed as `e6a1c3d`; [CI passed](https://github.com/fransiscuss/chargemesh-io/actions/runs/35301531300)
+  before F1 began.
 
 Docker is unavailable in this WSL environment, so the SteVe Compose stack has
 not been launched. Its full-session validation belongs to F2.
@@ -27,3 +28,17 @@ Schema decisions:
 - Bigint message IDs and sink cursors preserve values beyond JavaScript's safe
   integer range.
 - Encrypted JSON configuration columns store a versioned ciphertext string.
+
+## F1 — OCPP core library
+
+Implemented the codec with raw-frame preservation, version negotiation,
+version-specific errors, pending-call correlation, transaction/status helpers,
+the empty adapter registry, and Ajv validation using unchanged vendored schemas.
+
+- 90 total tests pass; OCPP line coverage is 100%.
+- All request/response schemas compile, and required fixtures validate for both versions.
+- Self-review covers raw passthrough versus rewritten serialization, immutable
+  transaction rewrites, expiry boundaries, schema packaging, and schema attribution.
+- Vendored files match the lockfile-pinned source byte-for-byte. The URI resolver
+  supports its legacy schema IDs without editing those files.
+- Commit, push, and CI confirmation are pending. F2 has not started.

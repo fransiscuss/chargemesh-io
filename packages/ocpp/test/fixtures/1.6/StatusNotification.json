@@ -1,0 +1,13 @@
+[
+  [
+    2,
+    "StatusNotification-1",
+    "StatusNotification",
+    {
+      "connectorId": 1,
+      "errorCode": "NoError",
+      "status": "Available"
+    }
+  ],
+  [3, "StatusNotification-1", {}]
+]

@@ -5,3 +5,4 @@ coverage
 .turbo
 packages/db/migrations/meta
 docs/spec.md
+packages/ocpp/schemas

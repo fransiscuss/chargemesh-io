@@ -1,0 +1,21 @@
+[
+  [
+    2,
+    "TransactionEvent-1",
+    "TransactionEvent",
+    {
+      "eventType": "Started",
+      "timestamp": "2026-09-18T00:00:00Z",
+      "triggerReason": "Authorized",
+      "seqNo": 0,
+      "transactionInfo": {
+        "transactionId": "tx-201-42"
+      },
+      "evse": {
+        "id": 1,
+        "connectorId": 1
+      }
+    }
+  ],
+  [3, "TransactionEvent-1", {}]
+]

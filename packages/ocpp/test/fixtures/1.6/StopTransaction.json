@@ -1,0 +1,21 @@
+[
+  [
+    2,
+    "StopTransaction-1",
+    "StopTransaction",
+    {
+      "transactionId": 42,
+      "meterStop": 1000,
+      "timestamp": "2026-09-18T01:00:00Z"
+    }
+  ],
+  [
+    3,
+    "StopTransaction-1",
+    {
+      "idTagInfo": {
+        "status": "Accepted"
+      }
+    }
+  ]
+]

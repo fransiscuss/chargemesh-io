@@ -709,6 +709,9 @@ message ListMessagesResponse { repeated OcppEvent items=1; string next_cursor=2;
 ## 7. Open questions
 _(The agent appends questions here instead of guessing.)_
 
+- F1: Upstream clarifies that OCA schemas use CC BY-ND 4.0, while ocpp-rpc
+  code uses MIT. Vendored files are unchanged and include source/license attribution.
+
 - F0: The recorder must retain malformed frames, but the canonical event envelope
   requires `msgType` and `uniqueId`. The schema allows these parsed fields to be
   null while retaining `raw`; the external representation needs resolving in F4.

@@ -1,0 +1,24 @@
+[
+  [
+    2,
+    "MeterValues-1",
+    "MeterValues",
+    {
+      "connectorId": 1,
+      "transactionId": 42,
+      "meterValue": [
+        {
+          "timestamp": "2026-09-18T00:30:00Z",
+          "sampledValue": [
+            {
+              "value": "500",
+              "measurand": "Energy.Active.Import.Register",
+              "unit": "Wh"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [3, "MeterValues-1", {}]
+]

@@ -1,0 +1,23 @@
+[
+  [
+    2,
+    "BootNotification-1",
+    "BootNotification",
+    {
+      "chargingStation": {
+        "vendorName": "ChargeMesh",
+        "model": "SIM-201"
+      },
+      "reason": "PowerUp"
+    }
+  ],
+  [
+    3,
+    "BootNotification-1",
+    {
+      "currentTime": "2026-09-18T00:00:00Z",
+      "interval": 60,
+      "status": "Accepted"
+    }
+  ]
+]

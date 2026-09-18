@@ -1,7 +1,8 @@
 {
   "extends": "@chargemesh/config/tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "dist",
+    "resolveJsonModule": true
   },
   "include": ["src/**/*.ts"]
 }

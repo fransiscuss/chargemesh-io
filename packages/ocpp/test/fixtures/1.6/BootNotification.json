@@ -1,0 +1,20 @@
+[
+  [
+    2,
+    "BootNotification-1",
+    "BootNotification",
+    {
+      "chargePointVendor": "ChargeMesh",
+      "chargePointModel": "SIM-16"
+    }
+  ],
+  [
+    3,
+    "BootNotification-1",
+    {
+      "status": "Accepted",
+      "currentTime": "2026-09-18T00:00:00Z",
+      "interval": 60
+    }
+  ]
+]

@@ -1,0 +1,23 @@
+[
+  [
+    2,
+    "StartTransaction-1",
+    "StartTransaction",
+    {
+      "connectorId": 1,
+      "idTag": "TEST-TAG",
+      "meterStart": 0,
+      "timestamp": "2026-09-18T00:00:00Z"
+    }
+  ],
+  [
+    3,
+    "StartTransaction-1",
+    {
+      "transactionId": 42,
+      "idTagInfo": {
+        "status": "Accepted"
+      }
+    }
+  ]
+]

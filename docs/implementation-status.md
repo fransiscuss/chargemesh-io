@@ -2,6 +2,8 @@
 
 ## F0 — foundation
 
+[Handoff](handoffs/F0.md)
+
 Implemented workspace shells, shared tooling, CI, the full database schema,
 generated migrations, PGlite test support, and versioned AES-256-GCM encryption.
 
@@ -31,6 +33,8 @@ Schema decisions:
 
 ## F1 — OCPP core library
 
+[Handoff](handoffs/F1.md)
+
 Implemented the codec with raw-frame preservation, version negotiation,
 version-specific errors, pending-call correlation, transaction/status helpers,
 the empty adapter registry, and Ajv validation using unchanged vendored schemas.
@@ -46,6 +50,8 @@ the empty adapter registry, and Ajv validation using unchanged vendored schemas.
 
 ## F2 — simulator and mock CSMS
 
+[Handoff](handoffs/F2.md)
+
 Implemented both protocol scenarios, the simulator and mock CLIs, configurable
 responses and delays, authentication rejection, server-initiated calls, frame
 capture, and deterministic clocks/IDs. The Compose mock placeholder is replaced.
@@ -59,5 +65,19 @@ capture, and deterministic clocks/IDs. The Compose mock placeholder is replaced.
 - `scripts/steve-smoke.sh` passed against Compose SteVe 3.8.0: all eight 1.6
   calls completed and a new `transaction_stop` row was persisted.
 - Lint, typecheck, build, Compose configuration validation and code review passed.
-- Commit, push and CI confirmation are pending.
-- F3 has not started.
+- Committed and pushed as `61a5113`; [CI passed](https://github.com/fransiscuss/chargemesh-io/actions/runs/35304340190)
+  before F3 began.
+
+## F3 — transparent primary proxy
+
+Implemented primary-only forwarding, both authentication modes, database-backed
+configuration, version negotiation, heartbeat/correlation cleanup, the interceptor
+pipeline, startup environment validation, health reporting, and graceful shutdown.
+
+- 165 tests passed; session line coverage 98.32%, pipeline 100%, overall 96.35%.
+- The simulator completed eight calls through the gateway into Compose SteVe;
+  the smoke script verified a new completed transaction in SteVe's database.
+- Lint, build and typecheck passed. Review covered raw frame preservation, authentication,
+  early upstream traffic, upgrade cancellation, socket cleanup, and proxy trust.
+- Commit/push/CI gates and the F3 handoff are pending. F4 has not started.
+- After F3 completes, the primary agent will orchestrate Luna implementation agents.

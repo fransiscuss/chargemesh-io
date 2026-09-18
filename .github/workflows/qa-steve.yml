@@ -21,6 +21,7 @@ jobs:
       - run: pnpm build
       - run: docker compose --profile qa up -d steve
       - run: bash scripts/steve-smoke.sh
+      - run: bash scripts/steve-smoke.sh --proxy
       - name: SteVe logs
         if: always()
         run: docker compose logs --tail 100 steve steve-db

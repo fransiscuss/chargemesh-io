@@ -18,7 +18,7 @@ Tests use Vitest with enforced coverage. Database tests apply the committed SQL
 migrations to isolated in-memory PGlite databases; they need no external services.
 CI additionally applies the compiled migration runner twice to Postgres 16.
 
-The gateway, web and proto workspaces are initially empty shells.
+The web and proto workspaces are initially empty shells.
 Runtime environment parsing is added with each app's implementation.
 
 ## Database
@@ -66,8 +66,26 @@ script registers `SIM001` and `TEST-TAG` in the local QA database, runs the CLI,
 and verifies SteVe persisted a completed transaction. The same check is available
 as the manually triggered **SteVe simulator smoke** GitHub Actions workflow.
 
+`bash scripts/steve-smoke.sh --proxy` runs that session through an ephemeral
+gateway and verifies another completed transaction in SteVe.
+
+## Gateway
+
+Configure the required variables in `.env` using `.env.example`, apply migrations,
+and create a charger, upstream, and primary association in the database. Then run
+`pnpm --filter gateway start`. Chargers connect at `/ocpp/{identity}` on port 8080;
+`/healthz` reports the connected count. Plain WebSockets require
+`ALLOW_INSECURE_WS=true`. In Fly, the gateway trusts the edge's TLS header only
+when `FLY_APP_NAME` is set. Keep direct access to the backend private.
+
+Gateway passwords use `scrypt$N$r$p$salt$hash`; the hash helper is currently in
+`apps/gateway/src/session/auth.ts`. Upstream passwords use the database crypto
+helpers. No dashboard or credential-management command is implemented yet.
+
 ## Feature gate
 
 Complete, test, review, commit and push each feature before starting the next.
 Record validation and any outstanding external checks in
 [implementation status](docs/implementation-status.md).
+Each completed feature has a resume document in `docs/handoffs/`; see `AGENTS.md`
+for the sequential feature and delegation rules.

@@ -11,9 +11,25 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "start": "node --env-file-if-exists=../../.env dist/index.js",
+    "smoke:steve": "node scripts/steve-smoke.mjs"
   },
   "devDependencies": {
-    "@chargemesh/config": "workspace:*"
+    "@chargemesh/config": "workspace:*",
+    "@chargemesh/sim": "workspace:*",
+    "@types/pg": "^8.23.1",
+    "@types/ws": "^8.18.1"
+  },
+  "dependencies": {
+    "@chargemesh/db": "workspace:*",
+    "@chargemesh/ocpp": "workspace:*",
+    "drizzle-orm": "^0.45.2",
+    "fastify": "^5.12.5",
+    "pg": "^8.23.0",
+    "pino": "^9.14.0",
+    "ulid": "^3.0.2",
+    "ws": "^8.21.3",
+    "zod": "^4.6.5"
   }
 }

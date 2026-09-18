@@ -70,6 +70,8 @@ capture, and deterministic clocks/IDs. The Compose mock placeholder is replaced.
 
 ## F3 — transparent primary proxy
 
+[Handoff](handoffs/F3.md)
+
 Implemented primary-only forwarding, both authentication modes, database-backed
 configuration, version negotiation, heartbeat/correlation cleanup, the interceptor
 pipeline, startup environment validation, health reporting, and graceful shutdown.
@@ -79,5 +81,5 @@ pipeline, startup environment validation, health reporting, and graceful shutdow
   the smoke script verified a new completed transaction in SteVe's database.
 - Lint, build and typecheck passed. Review covered raw frame preservation, authentication,
   early upstream traffic, upgrade cancellation, socket cleanup, and proxy trust.
-- Commit/push/CI gates and the F3 handoff are pending. F4 has not started.
-- After F3 completes, the primary agent will orchestrate Luna implementation agents.
+- Committed and pushed as `7519c13`; [CI passed](https://github.com/fransiscuss/chargemesh-io/actions/runs/35305298759).
+- Handoff is complete. Next: F4, implemented by Luna under primary-agent orchestration.

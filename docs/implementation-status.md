@@ -111,3 +111,32 @@ recorder-aware shutdown flush.
   upstream leg's `remote_ip`.
 - Committed and pushed as `6e5d4ed`; [CI passed](https://github.com/fransiscuss/chargemesh-io/actions/runs/35307282237).
 - Handoff is complete. Next: F5, implemented by sub-agent under primary-agent orchestration.
+
+## F5 — deploy & CI/CD (push to Fly)
+
+[Handoff](handoffs/F5.md)
+
+Implemented the multi-stage Dockerfile (turbo prune → node:24-slim non-root
+runner, one image for both processes), gateway/worker entry split
+(`dist/main.js` / `dist/worker.js` with an F14 placeholder worker), `fly.toml`
+(processes, http_service 8080 with health check, 50051 TLS/h2 service, migrate
+release command), the `deploy-gateway` push workflow reusing CI, RUNBOOK, and
+hadolint + actionlint CI steps.
+
+- 183 tests pass (182 pre-existing + 1 new worker test); coverage gates hold
+  (recorder 97.08%, session 98.32%, pipeline 100%).
+- All third-party pins verified real (flyctl SHA, hadolint v3.5.0,
+  actionlint v1.7.12); actionlint clean locally; fly.toml/workflows parse.
+- Built image re-verified by the orchestrator: runs as uid 1001, `/healthz`
+  ok, worker handles SIGTERM cleanly; release command ran twice against
+  postgres:16 in the delegate's check.
+- `shutdown.test.ts` already met the F5 unit-test requirement; no change needed.
+- Committed and pushed as `917b325`; [CI passed](https://github.com/fransiscuss/chargemesh-io/actions/runs/35308870429).
+- Handoff is complete (docs commit follows). Next: F6, implemented by sub-agent
+  under primary-agent orchestration.
+
+Outstanding user steps before F5's production gate closes: create the
+`chargemesh-gw` Fly app, set `fly secrets`, add certs + DNS, store
+`FLY_API_TOKEN` in GitHub secrets, then re-run `deploy-gateway`. The first
+pipeline run's `deploy` job failed only on the missing token; `test` passed.
+See the F5 handoff for the run links and exact commands.

@@ -1,8 +1,7 @@
-.git
 **/node_modules
 **/dist
 **/.turbo
-coverage
+**/coverage
+**/.next
+.git
 .env
-.env.*
-!.env.example

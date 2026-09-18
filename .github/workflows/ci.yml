@@ -37,6 +37,15 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm build
       - run: pnpm test
+      - name: Lint Dockerfile (hadolint)
+        uses: hadolint/hadolint-action@v3.5.0
+        with:
+          dockerfile: Dockerfile
+      - name: Lint workflows (actionlint)
+        run: |
+          curl -sSL -o /tmp/actionlint.tar.gz https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz
+          tar xz -C /tmp -f /tmp/actionlint.tar.gz actionlint
+          /tmp/actionlint
       - name: Apply migrations twice (idempotency)
         env:
           DATABASE_URL: postgres://chargemesh:chargemesh@localhost:5432/chargemesh

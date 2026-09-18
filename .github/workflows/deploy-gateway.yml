@@ -1,0 +1,32 @@
+name: deploy-gateway
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/gateway/**'
+      - 'packages/**'
+      - 'Dockerfile'
+      - 'fly.toml'
+      - 'pnpm-lock.yaml'
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-gateway
+  cancel-in-progress: false
+
+jobs:
+  test:
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      # Pinned to the v1.5 tag (commit fc53c09, verified via the GitHub API).
+      - uses: superfly/flyctl-actions/setup-flyctl@fc53c09e1bc3be6f54706524e3b82c4f462f77be
+      - run: flyctl deploy --remote-only --config fly.toml --app chargemesh-gw
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

@@ -1,6 +1,7 @@
 import { serializeFrame } from '@chargemesh/ocpp';
 import type { OcppFrame, ParseResult, OcppVersion } from '@chargemesh/ocpp';
 import type { Delivery } from '@chargemesh/db';
+import type { OcppEvent } from '../recorder/eventBuilder.js';
 
 export type FrameContext = {
   raw: string;
@@ -15,6 +16,10 @@ export type FrameContext = {
   action: string | null;
   latencyMs: number | null;
   delivery: Delivery;
+  /** Set by the validator async interceptor before the record is written. */
+  validation?: { valid: boolean; errors: unknown[] | null };
+  /** Resolved by the recorder async interceptor once the DB id is assigned. */
+  recorded?: Promise<OcppEvent>;
   forward: (raw: string) => string[];
 };
 export type SyncResult =

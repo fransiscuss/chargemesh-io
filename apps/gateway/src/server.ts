@@ -7,6 +7,7 @@ import { ulid } from 'ulid';
 import { negotiateSubprotocol } from '@chargemesh/ocpp';
 import type { ConfigStore } from './config/store.js';
 import { Pipeline } from './pipeline/pipeline.js';
+import type { ConnectionTracker } from './recorder/connections.js';
 import { parseIdentity } from './session/identity.js';
 import { authenticateGateway } from './session/auth.js';
 import { openPrimary, UpstreamError } from './session/upstream.js';
@@ -22,6 +23,10 @@ export type GatewayOptions = {
   upstreamTimeoutMs?: number;
   trustFlyProxy?: boolean;
   logLevel?: string;
+  /** F4 traffic recorder drain hook; flushed on shutdown before the pipeline. */
+  recorder?: { flush: () => Promise<void> };
+  /** F4 connection tracker; open/close rows are best-effort and never fail upgrades. */
+  connections?: ConnectionTracker;
 };
 export function createGateway(options: GatewayOptions) {
   const app = Fastify({ logger: { level: options.logLevel ?? 'info' } });
@@ -146,6 +151,46 @@ export function createGateway(options: GatewayOptions) {
           options.now,
         );
         sessions.set(id, session);
+        const tracker = options.connections;
+        if (tracker) {
+          const upstreamConnectionId = (options.idGenerator ?? ulid)();
+          const remoteIp = request.socket.remoteAddress ?? null;
+          void tracker
+            .opened({
+              id,
+              chargerId: config.id,
+              kind: 'charger',
+              remoteIp,
+              subprotocol: protocol,
+            })
+            .catch((error: unknown) => app.log.error(error, 'Connection open not recorded'));
+          void tracker
+            .opened({
+              id: upstreamConnectionId,
+              chargerId: config.id,
+              kind: 'upstream',
+              upstreamId: config.primary!.id,
+              remoteIp: null,
+              subprotocol: protocol,
+            })
+            .catch((error: unknown) => app.log.error(error, 'Connection open not recorded'));
+          charger.once('close', (code: number, reason: Buffer) => {
+            void tracker
+              .closed(id, config.id, 'charger', {
+                closeCode: code,
+                closeReason: reason.toString(),
+              })
+              .catch((error: unknown) => app.log.error(error, 'Connection close not recorded'));
+          });
+          link.socket.once('close', (code: number, reason: Buffer) => {
+            void tracker
+              .closed(upstreamConnectionId, config.id, 'upstream', {
+                closeCode: code,
+                closeReason: reason.toString(),
+              })
+              .catch((error: unknown) => app.log.error(error, 'Connection close not recorded'));
+          });
+        }
       });
       // If ws rejects a malformed handshake before accepting, do not leak the primary.
       if (!accepted) {
@@ -182,7 +227,13 @@ export function createGateway(options: GatewayOptions) {
         closeSessions: async (code) => {
           await Promise.all([...sessions.values()].map((session) => session.close(code)));
         },
-        flush: () => pipeline.flush(),
+        flush: async () => {
+          // Drain the recorder queue first so pending record writes resolve,
+          // then await the pipeline's async observers, then drain stragglers.
+          await options.recorder?.flush();
+          await pipeline.flush();
+          await options.recorder?.flush();
+        },
         exit: async () => {
           await new Promise<void>((resolve) => wss.close(() => resolve()));
           await app.close();

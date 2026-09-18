@@ -82,4 +82,32 @@ pipeline, startup environment validation, health reporting, and graceful shutdow
 - Lint, build and typecheck passed. Review covered raw frame preservation, authentication,
   early upstream traffic, upgrade cancellation, socket cleanup, and proxy trust.
 - Committed and pushed as `7519c13`; [CI passed](https://github.com/fransiscuss/chargemesh-io/actions/runs/35305298759).
-- Handoff is complete. Next: F4, implemented by Luna under primary-agent orchestration.
+- Handoff is complete. Next: F4, implemented under primary-agent orchestration.
+
+## F4 — traffic recorder
+
+[Handoff](handoffs/F4.md)
+
+Implemented the async validator/recorder/busPublisher interceptor chain, the
+bounded batch writer with backoff retries, the in-process event bus, connection
+open/close tracking with charger presence, and production wiring with
+recorder-aware shutdown flush.
+
+- 182 tests pass (165 pre-existing + 17 new); recorder line coverage 97.08%,
+  session 98.32%, pipeline 100%.
+- MockCsms full-session integration: 16 `ocpp_messages` rows for 16 frames with
+  exact raws, all valid, every response carrying action and latency; bus
+  published all 16 with DB ids; both connection legs closed; charger presence
+  true → false.
+- SteVe + Neon gate met via a removed one-off script: 16/16 valid rows, 8/8
+  responses with action and latency, 2 closed connections; all QA rows cleaned
+  up afterwards.
+- Malformed frames settle the spec open question: nullable msgType/uniqueId/
+  action with retained raw and `valid=false`. Bus publishes after the DB id is
+  assigned (no provisional ulid).
+- Lint, build and typecheck passed. Review covered correlation single-sourcing,
+  interceptor ordering, overflow accounting, shutdown flush, best-effort
+  tracking, and F3 preservation; fixed a duplicated test assertion and the
+  upstream leg's `remote_ip`.
+- Committed and pushed as `6e5d4ed`; [CI passed](https://github.com/fransiscuss/chargemesh-io/actions/runs/35307282237).
+- Handoff is complete. Next: F5, implemented by sub-agent under primary-agent orchestration.

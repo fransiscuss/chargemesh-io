@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: chargemesh
+      POSTGRES_PASSWORD: chargemesh
+      POSTGRES_DB: chargemesh
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U chargemesh']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  steve-db:
+    image: mariadb:10.4.30
+    profiles: [qa]
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: stevedb
+      MYSQL_USER: steve
+      MYSQL_PASSWORD: changeme
+    volumes:
+      - steve-data:/var/lib/mysql
+    networks:
+      default:
+        aliases: [mariadb]
+
+  steve:
+    # Official SteVe 3.8.0 source, pinned to its release commit.
+    build:
+      context: https://github.com/steve-community/steve.git#71bd4394c94dd9ca3a3870f5cf6678ae1da99c0d
+    profiles: [qa]
+    depends_on: [steve-db]
+    ports:
+      - '127.0.0.1:8180:8180'
+
+  mock-csms:
+    image: node:24-bookworm-slim
+    profiles: [mock-placeholder]
+    command: ['node', '-e', "console.log('Mock CSMS placeholder; implemented in F2')"]
+
+volumes:
+  postgres-data:
+  steve-data:

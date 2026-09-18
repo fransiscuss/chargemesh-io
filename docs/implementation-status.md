@@ -16,8 +16,8 @@ Local validation and self-review completed:
 - Committed and pushed as `e6a1c3d`; [CI passed](https://github.com/fransiscuss/chargemesh-io/actions/runs/35301531300)
   before F1 began.
 
-Docker is unavailable in this WSL environment, so the SteVe Compose stack has
-not been launched. Its full-session validation belongs to F2.
+Docker was unavailable during F0. F2 subsequently validated the Compose stack
+using Docker Desktop's Linux engine through the Windows CLI.
 
 Schema decisions:
 
@@ -41,4 +41,23 @@ the empty adapter registry, and Ajv validation using unchanged vendored schemas.
   transaction rewrites, expiry boundaries, schema packaging, and schema attribution.
 - Vendored files match the lockfile-pinned source byte-for-byte. The URI resolver
   supports its legacy schema IDs without editing those files.
-- Commit, push, and CI confirmation are pending. F2 has not started.
+- Committed and pushed as `409ca4d`; [CI passed](https://github.com/fransiscuss/chargemesh-io/actions/runs/35302178269)
+  before F2 began. Built ESM import and validation also passed.
+
+## F2 — simulator and mock CSMS
+
+Implemented both protocol scenarios, the simulator and mock CLIs, configurable
+responses and delays, authentication rejection, server-initiated calls, frame
+capture, and deterministic clocks/IDs. The Compose mock placeholder is replaced.
+
+- 110 tests pass; simulator line coverage is 93.73%.
+- Both full-session scenarios validate against the OCA schemas.
+- Review covers pending-call cleanup, rejected upgrades, handler failures,
+  non-mutating fixtures, CLI cleanup, and use of returned transaction IDs.
+- Both native CLI scenarios passed against the mock; the Docker-built mock
+  additionally passed a full 2.0.1 CLI session.
+- `scripts/steve-smoke.sh` passed against Compose SteVe 3.8.0: all eight 1.6
+  calls completed and a new `transaction_stop` row was persisted.
+- Lint, typecheck, build, Compose configuration validation and code review passed.
+- Commit, push and CI confirmation are pending.
+- F3 has not started.

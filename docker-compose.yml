@@ -39,9 +39,12 @@ services:
       - '127.0.0.1:8180:8180'
 
   mock-csms:
-    image: node:24-bookworm-slim
-    profiles: [mock-placeholder]
-    command: ['node', '-e', "console.log('Mock CSMS placeholder; implemented in F2')"]
+    build:
+      context: .
+      dockerfile: packages/sim/Dockerfile
+    profiles: [mock]
+    ports:
+      - '127.0.0.1:9000:9000'
 
 volumes:
   postgres-data:

@@ -11,9 +11,16 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sim": "node dist/cli.js",
+    "mock-csms": "node dist/mockCli.js"
   },
   "devDependencies": {
-    "@chargemesh/config": "workspace:*"
+    "@chargemesh/config": "workspace:*",
+    "@types/ws": "^8.18.1"
+  },
+  "dependencies": {
+    "@chargemesh/ocpp": "workspace:*",
+    "ws": "^8.21.3"
   }
 }

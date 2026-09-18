@@ -18,7 +18,7 @@ Tests use Vitest with enforced coverage. Database tests apply the committed SQL
 migrations to isolated in-memory PGlite databases; they need no external services.
 CI additionally applies the compiled migration runner twice to Postgres 16.
 
-The gateway, web, OCPP, proto and simulator workspaces are initially empty shells.
+The gateway, web and proto workspaces are initially empty shells.
 Runtime environment parsing is added with each app's implementation.
 
 ## Database
@@ -47,7 +47,24 @@ release and starts its MariaDB dependency. Its UI is at
 `http://localhost:8180/steve` and OCPP 1.6 endpoint at
 `ws://localhost:8180/steve/websocket/CentralSystemService/{identity}`.
 SteVe requires MariaDB; ChargeMesh uses Postgres independently. Local services
-bind only to loopback. The mock CSMS Compose entry is a placeholder until F2.
+bind only to loopback.
+
+Build first with `pnpm build`, then run `pnpm mock-csms` (port 9000). In another
+terminal:
+
+```sh
+pnpm sim --url ws://localhost:9000 --id SIM001 --version 1.6 --password x --scenario full-session
+pnpm sim --url ws://localhost:9000 --id SIM201 --version 2.0.1 --scenario full-session
+```
+
+`--url` is the base endpoint; the CLI appends the encoded charger identity.
+`--id-tag` defaults to `TEST-TAG`. The mock also runs through
+`docker compose --profile mock up -d mock-csms`.
+
+For SteVe, run `bash scripts/steve-smoke.sh` after starting the QA stack. The
+script registers `SIM001` and `TEST-TAG` in the local QA database, runs the CLI,
+and verifies SteVe persisted a completed transaction. The same check is available
+as the manually triggered **SteVe simulator smoke** GitHub Actions workflow.
 
 ## Feature gate
 

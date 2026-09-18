@@ -101,10 +101,20 @@ importers:
         version: link:../config
 
   packages/sim:
+    dependencies:
+      '@chargemesh/ocpp':
+        specifier: workspace:*
+        version: link:../ocpp
+      ws:
+        specifier: ^8.21.3
+        version: 8.21.3
     devDependencies:
       '@chargemesh/config':
         specifier: workspace:*
         version: link:../config
+      '@types/ws':
+        specifier: ^8.18.1
+        version: 8.18.1
 
 packages:
 
@@ -852,6 +862,9 @@ packages:
 
   '@types/pg@8.23.1':
     resolution: {integrity: sha512-fKVHpikPdg4GKks3JuLEhvwSyvwzF23hnabPy6DD8ljVbC7+6J5dQzdv4arV6jqq57djnMgs1HKBxX4P8aBI3A==}
+
+  '@types/ws@8.18.1':
+    resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
 
   '@typescript-eslint/eslint-plugin@8.70.0':
     resolution: {integrity: sha512-/v8HZt6RlyIZxB3ntehELOcUcfxKPVGWXnQdJuHRmzrqgF8nQypcC/oxGW+Ot4VGKDq81XugPKxx0n5PBtf9PA==}
@@ -2311,6 +2324,10 @@ snapshots:
       '@types/node': 24.13.5
       pg-protocol: 1.16.0
       pg-types: 2.2.0
+
+  '@types/ws@8.18.1':
+    dependencies:
+      '@types/node': 24.13.5
 
   '@typescript-eslint/eslint-plugin@8.70.0(@typescript-eslint/parser@8.70.0(eslint@9.39.5)(typescript@5.9.3))(eslint@9.39.5)(typescript@5.9.3)':
     dependencies:

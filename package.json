@@ -12,6 +12,8 @@
     "typecheck": "turbo run typecheck",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
+    "sim": "pnpm --filter @chargemesh/sim sim",
+    "mock-csms": "pnpm --filter @chargemesh/sim mock-csms",
     "format": "prettier --write .",
     "db:generate": "pnpm --filter @chargemesh/db db:generate",
     "db:migrate": "pnpm --filter @chargemesh/db build && node --env-file-if-exists=.env packages/db/dist/migrate.js"

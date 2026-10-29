@@ -25,7 +25,7 @@
     "@chargemesh/db": "workspace:*",
     "@chargemesh/ocpp": "workspace:*",
     "drizzle-orm": "^0.45.2",
-    "fastify": "^5.12.5",
+    "fastify": "^5.12.6",
     "pg": "^8.23.0",
     "pino": "^9.14.0",
     "ulid": "^3.0.2",
